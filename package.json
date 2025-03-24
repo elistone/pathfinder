@@ -1,0 +1,28 @@
+{
+  "name": "pathfinding-simulation",
+  "version": "1.0.0",
+  "description": "Interactive pathfinding simulation with TypeScript",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html",
+    "clean": "rimraf dist .parcel-cache"
+  },
+  "keywords": [
+    "pathfinding",
+    "typescript",
+    "simulation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^2.8.3",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.0.4"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
