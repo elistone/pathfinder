@@ -4,12 +4,19 @@
   "description": "Interactive pathfinding simulation with TypeScript",
   "main": "dist/app.js",
   "scripts": {
+    "prepare": "husky",
     "start": "parcel index.html --open",
     "build": "parcel build index.html",
     "clean": "rimraf dist .parcel-cache",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "format": "prettier --write 'src/**/*.{js,ts,css,html}'"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "keywords": [
     "pathfinding",
@@ -25,6 +32,8 @@
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "parcel": "^2.8.3",
     "prettier": "^3.5.3",
     "rimraf": "^5.0.1",
