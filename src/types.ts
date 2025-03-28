@@ -6,6 +6,8 @@ export interface Position {
 export interface GridOptions {
     container: HTMLElement;
     cellSize?: number;
+    worldWidth?: number;
+    worldHeight?: number;
 }
 
 export enum CellType {

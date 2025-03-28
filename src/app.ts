@@ -224,8 +224,8 @@ class PathfindingApp {
 
     // Method to clear visualization frames
     private clearFrames(): void {
-        for (let y = 0; y < this.grid.getHeight(); y++) {
-            for (let x = 0; x < this.grid.getWidth(); x++) {
+        for (let y = 0; y < this.grid.getWorldHeight(); y++) {
+            for (let x = 0; x < this.grid.getWorldWidth(); x++) {
                 const cell = this.grid.getCell({ x, y });
                 if (cell) {
                     if (cell.getType() === CellType.Path || cell.getType() === CellType.Visited || cell.getType() === CellType.Target) {
@@ -408,7 +408,7 @@ class PathfindingApp {
         // Reset grid first
         this.grid.reset();
 
-        console.log(`Grid size: ${this.grid.getWidth()}x${this.grid.getHeight()}`);
+        console.log(`Grid size: ${this.grid.getWorldWidth()}x${this.grid.getWorldHeight()}`);
 
         // Generate the world with the seed
         this.worldGenerator.generateWorld(seed);

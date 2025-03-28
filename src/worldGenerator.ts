@@ -60,8 +60,8 @@ export class WorldGenerator {
      * Ensure connectivity from starting position and fill unreachable areas
      */
     private ensureConnectivity(): void {
-        const width = this.grid.getWidth();
-        const height = this.grid.getHeight();
+        const width = this.grid.getWorldWidth();
+        const height = this.grid.getWorldHeight();
 
         // Create a map to track visited cells
         const visited: boolean[][] = Array(height).fill(null)
@@ -182,8 +182,8 @@ export class WorldGenerator {
      * Fill the grid with walls
      */
     private fillWithWalls(): void {
-        const width = this.grid.getWidth();
-        const height = this.grid.getHeight();
+        const width = this.grid.getWorldWidth();
+        const height = this.grid.getWorldHeight();
 
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
@@ -214,8 +214,8 @@ export class WorldGenerator {
      * Add some random empty spaces throughout the map
      */
     private addRandomEmptySpaces(): void {
-        const width = this.grid.getWidth();
-        const height = this.grid.getHeight();
+        const width = this.grid.getWorldWidth();
+        const height = this.grid.getWorldHeight();
 
         // Add about 15% random empty spaces
         const numToAdd = Math.floor(width * height * 0.15);
@@ -247,8 +247,8 @@ export class WorldGenerator {
      * Generate multiple caves across the map
      */
     private generateCaves(): Position[][] {
-        const width = this.grid.getWidth();
-        const height = this.grid.getHeight();
+        const width = this.grid.getWorldWidth();
+        const height = this.grid.getWorldHeight();
         const caveRegions: Position[][] = [];
 
         // Create more caves - increase density
@@ -292,8 +292,8 @@ export class WorldGenerator {
      */
     private generateCave(startX: number, startY: number, width: number, height: number): Position[] {
         const positions: Position[] = [];
-        const endX = Math.min(startX + width, this.grid.getWidth() - 1);
-        const endY = Math.min(startY + height, this.grid.getHeight() - 1);
+        const endX = Math.min(startX + width, this.grid.getWorldWidth() - 1);
+        const endY = Math.min(startY + height, this.grid.getWorldHeight() - 1);
 
         // Initialize with more empty spaces (70-80% empty)
         for (let y = startY; y < endY; y++) {
@@ -589,6 +589,6 @@ export class WorldGenerator {
      * Check if coordinates are within the grid bounds
      */
     private isWithinBounds(x: number, y: number): boolean {
-        return x >= 0 && y >= 0 && x < this.grid.getWidth() && y < this.grid.getHeight();
+        return x >= 0 && y >= 0 && x < this.grid.getWorldWidth() && y < this.grid.getWorldHeight();
     }
 }
