@@ -117,6 +117,7 @@ button.active {
 }
 
 .cell {
+    position: relative;
     border: 1px solid #ddd;
     cursor: pointer;
     transition: all 0.2s;
@@ -126,13 +127,26 @@ button.active {
     background-color: #f0f0f0;
 }
 
-.player-cell {
-    background-color: #4285F4;
-    border-radius: 50%;
+.player-cell:after,
+.target-cell:after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 100%;
     z-index: 3;
 }
-.player-cell:hover {
+
+.player-cell:after {
     background-color: #4285F4;
+}
+.target-cell:after {
+    background-color: #EA4335;
+}
+.player-cell:hover,
+.target-cell:hover {
     cursor: not-allowed;
 }
 
@@ -154,16 +168,6 @@ button.active {
 
 .visited-cell {
     background-color: #E8F0FE;
-}
-
-.target-cell {
-    background-color: #EA4335;
-    border-radius: 50%;
-    z-index: 2;
-}
-.target-cell:hover {
-    background-color: #EA4335;
-    cursor: not-allowed;
 }
 
 .queued-target-cell {
@@ -188,6 +192,7 @@ button.active {
 }
 
 .cell-example {
+    position: relative;
     width: 20px;
     height: 20px;
     margin-right: 5px;

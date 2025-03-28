@@ -1,4 +1,4 @@
-import { Position, CellType } from './types';
+import {Position, CellType} from './types';
 
 export class Cell {
     private element: HTMLElement;
@@ -45,6 +45,9 @@ export class Cell {
                 break;
             case CellType.PlayerTrail:
                 this.element.classList.add('player-trail-cell');
+                break;
+            case CellType.QueuedTarget:
+                this.element.classList.add('queued-target-cell');
                 break;
         }
 
