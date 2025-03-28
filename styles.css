@@ -119,7 +119,7 @@ button.active {
 .cell {
     border: 1px solid #ddd;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
 .cell:hover {
@@ -131,9 +131,17 @@ button.active {
     border-radius: 50%;
     z-index: 3;
 }
+.player-cell:hover {
+    background-color: #4285F4;
+    cursor: not-allowed;
+}
 
 .wall-cell {
     background-color: #333;
+}
+.wall-cell:hover {
+    background-color: #333;
+    cursor: not-allowed;
 }
 
 .path-cell {
@@ -148,6 +156,10 @@ button.active {
     background-color: #EA4335;
     border-radius: 50%;
     z-index: 2;
+}
+.target-cell:hover {
+    background-color: #EA4335;
+    cursor: not-allowed;
 }
 
 .legend {
