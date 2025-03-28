@@ -17,7 +17,8 @@ export enum CellType {
     Path = 'path',
     PlayerTrail = 'playerTrail',
     Visited = 'visited',
-    Target = 'target'
+    Target = 'target',
+    QueuedTarget = 'queuedTarget',
 }
 
 export interface CellNode {

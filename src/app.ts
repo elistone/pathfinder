@@ -10,6 +10,7 @@ class PathfindingApp {
     private player: Player;
     private pathFinder: PathFinder;
     private worldGenerator: WorldGenerator;
+    private currentTask: Position | null = null;
     private movementQueue: Position[] = [];
     private isRandomMode = false;
     private isMoving = false;
@@ -43,7 +44,11 @@ class PathfindingApp {
         // Update the seed display
         this.updateSeedDisplay();
 
+        // Set up event listeners
         this.setupEventListeners();
+
+        // Update the task list in the UI
+        this.updateTaskList();
     }
 
     private setupEventListeners(): void {
@@ -167,6 +172,12 @@ class PathfindingApp {
             // Add the position to the movement queue
             this.movementQueue.push(clickedPosition);
 
+            // Mark this cell as a queued target visually
+            clickedCell.setType(CellType.QueuedTarget);
+
+            // Update the task list in the UI
+            this.updateTaskList();
+
             // If not currently moving, start processing the queue
             if (!this.isMoving) {
                 await this.processMovementQueue();
@@ -178,15 +189,93 @@ class PathfindingApp {
         // If queue is empty, or we're already moving, return
         if (this.movementQueue.length === 0 || this.isMoving) return;
 
-        // Get the next position from the queue
-        const nextPosition = this.movementQueue.shift()!;
+        // Get the next position from the queue and set as current task
+        this.currentTask = this.movementQueue.shift()!;
+
+        // Update the task list in the UI after removing from queue
+        this.updateTaskList();
 
         // Navigate to the position
-        await this.navigateToPosition(nextPosition);
+        await this.navigateToPosition(this.currentTask);
+
+        // Clear current task when done
+        this.currentTask = null;
+        this.updateTaskList();
 
         // Process next position in the queue if any
         if (this.movementQueue.length > 0) {
             await this.processMovementQueue();
+        }
+    }
+
+    private updateTaskList(): void {
+        const taskList = document.getElementById('task-list');
+        if (!taskList) return;
+
+        // Clear the current list
+        taskList.innerHTML = '';
+
+        // Check if we have any tasks (current or queued)
+        if (!this.currentTask && this.movementQueue.length === 0) {
+            const emptyMessage = document.createElement('li');
+            emptyMessage.className = 'no-tasks';
+            emptyMessage.textContent = 'Currently no tasks';
+            taskList.appendChild(emptyMessage);
+            return;
+        }
+
+        // Add current task if exists
+        if (this.currentTask) {
+            const currentTaskItem = document.createElement('li');
+            currentTaskItem.className = 'task-item current-task';
+
+            const taskText = document.createElement('span');
+            taskText.textContent = `Position (${this.currentTask.x}, ${this.currentTask.y})`;
+
+            const statusBadge = document.createElement('span');
+            statusBadge.className = 'status-badge in-progress';
+            statusBadge.textContent = 'In Progress';
+
+            currentTaskItem.appendChild(taskText);
+            currentTaskItem.appendChild(statusBadge);
+            taskList.appendChild(currentTaskItem);
+        }
+
+        // Add each queued position
+        this.movementQueue.forEach((position, index) => {
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task-item';
+
+            const taskText = document.createElement('span');
+            taskText.textContent = `Position (${position.x}, ${position.y})`;
+
+            const removeButton = document.createElement('button');
+            removeButton.className = 'remove-task-btn';
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = () => this.removeTaskFromQueue(index);
+
+            taskItem.appendChild(taskText);
+            taskItem.appendChild(removeButton);
+            taskList.appendChild(taskItem);
+        });
+    }
+
+    private removeTaskFromQueue(index: number): void {
+        if (index >= 0 && index < this.movementQueue.length) {
+            // Get the position that's being removed
+            const removedPosition = this.movementQueue[index];
+
+            // Reset the cell type if it's a queued target
+            const cell = this.grid.getCell(removedPosition);
+            if (cell && cell.getType() === CellType.QueuedTarget) {
+                cell.reset();
+            }
+
+            // Remove from the queue
+            this.movementQueue.splice(index, 1);
+
+            // Update the UI
+            this.updateTaskList();
         }
     }
 
@@ -325,6 +414,8 @@ class PathfindingApp {
         this.movementCancelled = true;
         this.isMoving = false;
         this.movementQueue = [];
+
+        this.updateTaskList();
 
         // Cancel any active timeout
         if (this._currentTimeout !== null) {
