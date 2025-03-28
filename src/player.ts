@@ -9,7 +9,8 @@ export class Player {
         startPosition: Position
     ) {
         this.position = startPosition;
-        this.updatePlayerPosition(startPosition);
+        this.updatePlayerPosition(this.position);
+        this.grid.centerViewportOn(this.position);
     }
 
     public getPosition(): Position {
@@ -25,7 +26,10 @@ export class Player {
 
         // Then update to the new position
         this.position = { ...position };
-        this.updatePlayerPosition(position);
+        this.updatePlayerPosition(this.position);
+
+        // Center the viewport on the player
+        this.grid.centerViewportOn(this.position);
     }
 
     private updatePlayerPosition(position: Position): void {
