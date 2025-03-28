@@ -6,10 +6,11 @@ import {CellType, Position} from './types';
 import {SeededRandom} from './seededRandom';
 
 class PathfindingApp {
-    private grid: Grid;
+    private readonly grid: Grid;
     private player: Player;
     private pathFinder: PathFinder;
     private worldGenerator: WorldGenerator;
+    private movementQueue: Position[] = [];
     private isRandomMode = false;
     private isMoving = false;
     private randomModeTimer: number | null = null;
@@ -148,8 +149,8 @@ class PathfindingApp {
     }
 
     private async handleGridClick(event: MouseEvent): Promise<void> {
-        // If in random mode or already moving, ignore clicks
-        if (this.isRandomMode || this.isMoving) return;
+        // If in random mode, ignore clicks
+        if (this.isRandomMode) return;
 
         const target = event.target as HTMLElement;
         if (!target.classList.contains('cell')) return;
@@ -163,7 +164,29 @@ class PathfindingApp {
 
         // Path to the clicked position if it's not a wall and not the current player position
         if (clickedCell.getType() !== CellType.Wall && clickedCell.getType() !== CellType.Player) {
-            await this.navigateToPosition(clickedPosition);
+            // Add the position to the movement queue
+            this.movementQueue.push(clickedPosition);
+
+            // If not currently moving, start processing the queue
+            if (!this.isMoving) {
+                await this.processMovementQueue();
+            }
+        }
+    }
+
+    private async processMovementQueue(): Promise<void> {
+        // If queue is empty, or we're already moving, return
+        if (this.movementQueue.length === 0 || this.isMoving) return;
+
+        // Get the next position from the queue
+        const nextPosition = this.movementQueue.shift()!;
+
+        // Navigate to the position
+        await this.navigateToPosition(nextPosition);
+
+        // Process next position in the queue if any
+        if (this.movementQueue.length > 0) {
+            await this.processMovementQueue();
         }
     }
 
@@ -301,6 +324,7 @@ class PathfindingApp {
         // Cancel any ongoing movement
         this.movementCancelled = true;
         this.isMoving = false;
+        this.movementQueue = [];
 
         // Cancel any active timeout
         if (this._currentTimeout !== null) {
