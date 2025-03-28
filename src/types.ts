@@ -15,6 +15,7 @@ export enum CellType {
     Wall = 'wall',
     Player = 'player',
     Path = 'path',
+    PlayerTrail = 'playerTrail',
     Visited = 'visited',
     Target = 'target'
 }

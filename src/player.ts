@@ -3,6 +3,7 @@ import { Grid } from './grid';
 
 export class Player {
     private position: Position;
+    private trailCells: Position[] = [];
 
     constructor(
         private grid: Grid,
@@ -21,7 +22,8 @@ export class Player {
         // First, clear the old player position
         const currentCell = this.grid.getCell(this.position);
         if (currentCell) {
-            currentCell.reset();
+            currentCell.setType(CellType.PlayerTrail);
+            this.trailCells.push({...this.position});
         }
 
         // Then update to the new position
@@ -30,6 +32,17 @@ export class Player {
 
         // Center the viewport on the player
         this.grid.centerViewportOn(this.position);
+    }
+
+    // Add method to clear the trail
+    public clearTrail(): void {
+        for (const pos of this.trailCells) {
+            const cell = this.grid.getCell(pos);
+            if (cell && cell.getType() === CellType.PlayerTrail) {
+                cell.reset();
+            }
+        }
+        this.trailCells = [];
     }
 
     private updatePlayerPosition(position: Position): void {

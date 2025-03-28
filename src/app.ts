@@ -1,9 +1,9 @@
-import { Grid } from './grid';
-import { Player } from './player';
-import { PathFinder } from './pathfinder';
-import { WorldGenerator } from './worldGenerator';
-import { Position, CellType } from './types';
-import { SeededRandom } from './seededRandom';
+import {Grid} from './grid';
+import {Player} from './player';
+import {PathFinder} from './pathfinder';
+import {WorldGenerator} from './worldGenerator';
+import {CellType, Position} from './types';
+import {SeededRandom} from './seededRandom';
 
 class PathfindingApp {
     private grid: Grid;
@@ -234,6 +234,7 @@ class PathfindingApp {
                 }
             }
         }
+        this.player.clearTrail();
         this.isMoving = false;
     }
 
@@ -255,12 +256,10 @@ class PathfindingApp {
         // Add a delay to let the user see the complete path before movement begins
         if (!this.movementCancelled) {
             await new Promise<void>(resolve => {
-                const timeoutId = setTimeout(() => {
+                // Store timeout ID so it can be cancelled if needed
+                this._currentTimeout = setTimeout(() => {
                     resolve();
                 }, 500);
-
-                // Store timeout ID so it can be cancelled if needed
-                this._currentTimeout = timeoutId;
             });
             this._currentTimeout = null;
         }

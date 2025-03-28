@@ -24,7 +24,7 @@ export class Cell {
 
     public setType(type: CellType): void {
         // Remove previous type classes
-        this.element.classList.remove('player-cell', 'wall-cell', 'path-cell', 'visited-cell', 'target-cell');
+        this.element.classList.remove('player-cell', 'wall-cell', 'path-cell', 'visited-cell', 'target-cell', 'player-trail-cell');
 
         // Add new type class
         switch (type) {
@@ -42,6 +42,9 @@ export class Cell {
                 break;
             case CellType.Target:
                 this.element.classList.add('target-cell');
+                break;
+            case CellType.PlayerTrail:
+                this.element.classList.add('player-trail-cell');
                 break;
         }
 
