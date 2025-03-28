@@ -276,17 +276,15 @@ class PathfindingApp {
             const currentPosition = path[i];
 
             await new Promise<void>(resolve => {
-                const timeoutId = setTimeout(() => {
+                // Store timeout ID so it can be cancelled if needed
+                this._currentTimeout = setTimeout(() => {
                     // Check again if movement was cancelled
                     if (!this.movementCancelled) {
                         // Move player to current position
                         this.player.moveTo(currentPosition);
                     }
                     resolve();
-                }, 200); // Speed of movement
-
-                // Store timeout ID so it can be cancelled if needed
-                this._currentTimeout = timeoutId;
+                }, 200);
             });
         }
 
@@ -377,12 +375,6 @@ class PathfindingApp {
             // No empty cells, try again later
             this.randomModeTimer = window.setTimeout(() => this.pickRandomTarget(), 1000);
         }
-    }
-
-    // Generate new world with a random seed
-    private generateNewWorld(): void {
-        const newSeed = SeededRandom.generateSeedString();
-        this.generateWorld(newSeed);
     }
 
     // Generate world method with optional seed parameter
