@@ -261,7 +261,7 @@ class PathfindingApp {
       const removeButton = document.createElement("button");
       removeButton.className = "remove-task-btn";
       removeButton.textContent = "Remove";
-      removeButton.onclick = () => this.removeTaskFromQueue(index);
+      removeButton.onclick = (): void => this.removeTaskFromQueue(index);
 
       taskItem.appendChild(taskText);
       taskItem.appendChild(removeButton);
